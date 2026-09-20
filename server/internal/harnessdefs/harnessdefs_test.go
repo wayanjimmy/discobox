@@ -10,7 +10,7 @@ func TestSeedsCoverIncludedHarnesses(t *testing.T) {
 	for _, seed := range seeds {
 		bySlug[seed.Slug] = seed
 	}
-	for _, slug := range []string{"codex", "claude-code"} {
+	for _, slug := range []string{"codex", "claude-code", "pi", "dsh"} {
 		seed, ok := bySlug[slug]
 		if !ok || seed.Image == "" || seed.Name == "" {
 			t.Fatalf("seed %q = %#v, want a named seed with an image", slug, seed)
@@ -22,6 +22,8 @@ func TestImageEnvVar(t *testing.T) {
 	cases := map[string]string{
 		"codex":       "DISCOBOX_HARNESS_CODEX_IMAGE",
 		"claude-code": "DISCOBOX_HARNESS_CLAUDE_CODE_IMAGE",
+		"pi":          "DISCOBOX_HARNESS_PI_IMAGE",
+		"dsh":         "DISCOBOX_HARNESS_DSH_IMAGE",
 	}
 	for id, want := range cases {
 		if got := ImageEnvVar(id); got != want {

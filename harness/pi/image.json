@@ -1,0 +1,21 @@
+{
+  "apiVersion": "discobox.dev/image/v1",
+  "env": {
+    "PI_SKIP_VERSION_CHECK": "1",
+    "PI_TELEMETRY": "0"
+  },
+  "harness": {
+    "id": "pi",
+    "name": "Pi",
+    "description": "Pi coding agent configured for CLI Proxy API.",
+    "secrets": [
+      { "name": "CLI_PROXY_API_KEY", "required": true },
+      { "name": "CF_ACCESS_CLIENT_ID", "required": true },
+      { "name": "CF_ACCESS_CLIENT_SECRET", "required": true }
+    ],
+    "config": {
+      "reminder": "Enter the CLI Proxy API and Cloudflare Access credentials, then choose default, judge, and fast models.",
+      "command": ["/usr/local/libexec/discobox/configure-pi"]
+    }
+  }
+}

@@ -75,6 +75,8 @@ var harnessImages = []harnessImage{
 	{name: "codex", dir: "codex-cli"},
 	{name: "claude-code", dir: "claude-code"},
 	{name: "opencode", dir: "opencode"},
+	{name: "pi", dir: "pi"},
+	{name: "dsh", dir: "dsh"},
 	{name: "shell", dir: "shell"},
 }
 
@@ -378,8 +380,11 @@ func dockerImageSpecs(ctx context.Context, repoRoot string) ([]imageSpec, error)
 	}
 	commonSandboxSeen := copyFiles(sandboxSeen)
 	for _, harnessImage := range harnessImages {
-		for _, name := range []string{"Dockerfile", "configure.sh", "image.json"} {
-			delete(commonSandboxSeen, filepath.Join(repoRoot, "harness", harnessImage.dir, name))
+		harnessRoot := filepath.Join(repoRoot, "harness", harnessImage.dir)
+		for file := range commonSandboxSeen {
+			if file == harnessRoot || strings.HasPrefix(file, harnessRoot+string(filepath.Separator)) {
+				delete(commonSandboxSeen, file)
+			}
 		}
 	}
 	specs := []imageSpec{
@@ -436,8 +441,8 @@ func dockerImageSpecs(ctx context.Context, repoRoot string) ([]imageSpec, error)
 	for _, harnessImage := range harnessImages {
 		seen := copyFiles(commonSandboxSeen)
 		harnessDir := filepath.Join("harness", harnessImage.dir)
-		for _, name := range []string{"Dockerfile", "configure.sh", "image.json"} {
-			addFile(repoRoot, filepath.Join(harnessDir, name), seen)
+		if err := addTree(filepath.Join(repoRoot, harnessDir), seen); err != nil {
+			return nil, err
 		}
 		// An image that declares nothing has no manifest file and no build
 		// argument for one: its whole manifest is the base layer it inherits

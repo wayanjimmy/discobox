@@ -229,8 +229,8 @@ launchers, and configure scripts.
   could disagree about which release a sandbox is running.
 - Whether a harness has an interactive configure flow is the image's
   declaration (`config.command`), snapshotted as the config's config command;
-  a `Definition`'s `Configure` field (set by `claude-code`, `codex-cli`, and `opencode`, nil
-  for `shell`) is read by nothing. The configure process writes files and
+  a `Definition`'s `Configure` field (set by every coding harness, nil for
+  `shell`) is read by nothing. The configure process writes files and
   collected secret values to `ConfigureOutputPath`. Configure files use the
   same home-relative contract as all harness files; configure commands run from
   the sandbox workdir and must use `$HOME` when invoking one of those files.
@@ -241,6 +241,10 @@ launchers, and configure scripts.
   - `codex-cli`
   - `opencode` — opencode 1 (`opencode-ai`), the release its installer and docs
     install; opencode 2 (`@opencode/cli`) is a different program.
+  - `pi` — the Pi terminal agent. Its configure flow discovers models from the
+    configured CLI Proxy API and writes Pi's native custom-provider settings.
+  - `dsh` — DeepSeek Harness. Its primary surface is the browser UI; the image
+    also exposes the headless profile through `discobox-prompt`.
   - `shell` — the login shell, and the end of the resolution chain. Its
     Dockerfile installs nothing (the base image already ships the shell) and it
     has no `image.json` at all: no identity to declare beyond its reserved slug,
